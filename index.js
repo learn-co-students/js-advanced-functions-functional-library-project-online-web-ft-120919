@@ -146,23 +146,33 @@ const fi = (function() {
       } 
     },
 
-    flatten: function(array, bool, d=1) {
+    flatten: function(array, bool) {
       if (!!bool) {
-        return d > 0 ? array.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatten(val, d - 1) : val), [])
-                : array.slice();
-      }  else {
-        const stack = [...array]
-        const res = []
-        while(stack.length) {
-          const next = stack.pop();
-          if (Array.isArray(next)) {
-            stack.push(...next);
-          } else {
-            res.push(next);
-          }
-        }
-        return res.reverse()
+        return array.flat(1)
+      } else {
+        return array.flat(Infinity)
       }
+
+
+      // console.log(bool)
+      // console.log(array)
+      
+      // if (!!bool) {
+      //   return d > 0 ? array.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatten(val, d - 1) : val), [])
+      //           : array.slice();
+      // }  else {
+      //   const stack = [...array]
+      //   const res = []
+      //   while(stack.length) {
+      //     const next = stack.pop();
+      //     if (Array.isArray(next)) {
+      //       stack.push(...next);
+      //     } else {
+      //       res.push(next);
+      //     }
+      //   }
+      //   return res.reverse()
+      // }
     },
 
     uniq: function(array, sorted, callback) {
