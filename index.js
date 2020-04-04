@@ -121,24 +121,24 @@ const fi = (function() {
     },
 
     sortBy: function(array, callback) {
+      function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+      }
       let newArr = []
       for (let i = 0; i<array.length; i++) {
         newArr.push(callback(array[i]))
       }
       if (typeof array[0] === 'number' && callback(array[0]) === array[0]) {
         let sorted = newArr.sort(function(a, b){return a-b})
-        // console.log(sorted)
         return sorted
       } else if (typeof array[0] === 'number' && callback(array[0]) !== array[0]) {
-        // console.log(newArr)
         let myObj = array.reduce((a, key) => Object.assign(a, { [key]: Math.sin(key) }), {})
-        let valuesSorted = Object.values(myObj).sort()
+        let valuesSorted = Object.values(myObj).sort(function(a, b){return a-b})
         let newArray = []
         for (let i=0; i<valuesSorted.length; i++) {
-          
+          newArray.push(parseInt(getKeyByValue(myObj, valuesSorted[i])))
         }
         return newArray
-
       } 
       else {
         let sorted = newArr.sort()
@@ -146,30 +146,51 @@ const fi = (function() {
       } 
     },
 
-    flatten: function(array, bool) {
-      const stack = [...array]
-      console.log(stack)
-      const res = []
-      while(stack.length) {
-        const next = stack.pop();
-        if (Array.isArray(next)) {
-          stack.push(...next);
-        } else {
-          res.push(next);
+    flatten: function(array, bool, d=1) {
+      if (!!bool) {
+        return d > 0 ? array.reduce((acc, val) => acc.concat(Array.isArray(val) ? this.flatten(val, d - 1) : val), [])
+                : array.slice();
+      }  else {
+        const stack = [...array]
+        const res = []
+        while(stack.length) {
+          const next = stack.pop();
+          if (Array.isArray(next)) {
+            stack.push(...next);
+          } else {
+            res.push(next);
+          }
         }
+        return res.reverse()
       }
-      return res.reverse();
     },
 
-    uniq: function(array) {
-      let result = []
-      for (let i=0; i<array.length; i++) {
-        if (!array.find(array[i])) {
-          result.push(array[i])
+    uniq: function(array, callback) {
+      // const objA = {a: 1, b: 2}
+      // const objB = objA
+      // const objC = {c: 3, d: 4}
+      // let arra = [objA, objC, objB]
+      // let result = []
+      // let newArr = fi.sortBy(arra, function(num){ return num })
+
+      let arrA = []
+      if (!!callback) {
+        for (let i=0; i<array.length; i++) {
+          if (!arrA.includes(array[i])) {
+            arrA.push(array[i])
+          }
         }
+        console.log(arrA.slice(0,4))
+        return arrA.slice(0,4)
+      } else {
+        for (let i=0; i<array.length; i++) {
+          if (!arrA.includes(array[i])) {
+            arrA.push(array[i])
+          }
+        }
+        return arrA
       }
-      console.log(result)
-      return result
+
 
     },
 
