@@ -165,33 +165,29 @@ const fi = (function() {
       }
     },
 
-    uniq: function(array, callback) {
-      // const objA = {a: 1, b: 2}
-      // const objB = objA
-      // const objC = {c: 3, d: 4}
-      // let arra = [objA, objC, objB]
-      // let result = []
-      // let newArr = fi.sortBy(arra, function(num){ return num })
-
+    uniq: function(array, sorted, callback) {
       let arrA = []
-      if (!!callback) {
-        for (let i=0; i<array.length; i++) {
-          if (!arrA.includes(array[i])) {
-            arrA.push(array[i])
+      for (let i=0; i<array.length; i++) {
+        if (!arrA.includes(array[i])) {
+          arrA.push(array[i])
+        } 
+      }
+      
+      if (callback !== undefined) {
+        
+        let myObj = arrA.reduce((a, key) => Object.assign(a, { [key]: callback(key) }), {})
+        let uniqKeys = []
+        let uniqValues = []
+        for (let [key, value] of Object.entries(myObj)) {
+          if (!uniqValues.includes(value)) {
+            uniqValues.push(value)
+            uniqKeys.push(parseInt(key))
           }
         }
-        console.log(arrA.slice(0,4))
-        return arrA.slice(0,4)
+        return uniqKeys
       } else {
-        for (let i=0; i<array.length; i++) {
-          if (!arrA.includes(array[i])) {
-            arrA.push(array[i])
-          }
-        }
         return arrA
       }
-
-
     },
 
     keys: function(obj) {
