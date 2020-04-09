@@ -106,7 +106,6 @@ const fi = (function () {
       console.log(array)
       array.forEach((item) => newArray.push(item, callback(item)))
       console.log(newArray)
-      if ()
     },
 
 
